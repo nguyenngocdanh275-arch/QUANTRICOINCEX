@@ -5,61 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quản Trị CoinCex - Nhóm Yến Vy</title>
     <style>
-        /* Xóa sạch lề thừa của Blogger */
-        body, html { 
-            margin: 0 !important; 
-            padding: 0 !important; 
+        /* KHÓA KHUNG HÌNH & FULL MÀN HÌNH */
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100vw !important;
+            overflow-x: hidden !important;
+            background-color: #0f172a; /* Màu xanh đen sang trọng */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            background: white; 
+            padding: 25px 15px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); 
+            width: 94% !important;
+            max-width: 420px; 
+            box-sizing: border-box;
+            margin: 20px auto !important; 
+        }
+
+        /* LED TRẠNG THÁI */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        .led {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 10px #22c55e;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .header-section { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
+        h2 { color: #1e40af; margin: 0; text-transform: uppercase; font-size: 20px; font-weight: 900; }
+        .team-info { font-weight: bold; color: #f59e0b; margin-top: 5px; font-size: 13px; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; color: #334155; font-size: 14px; }
+        input, select { 
             width: 100%; 
-            height: 100%; 
-            overflow-x: hidden;
-            background-color: #f0f2f5;
+            padding: 14px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            outline: none;
         }
-        /* Chặn thanh navbar của blogger nếu có */
-        #navbar-iframe, .navbar, .header-outer, .footer-outer, .sidebar-wrapper {
-            display: none !important;
-            visibility: hidden !important;
+        input:focus { border-color: #3b82f6; }
+
+        /* NÚT BẤM CÓ HIỆU ỨNG */
+        .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        button { 
+            flex: 1; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+            transition: all 0.2s;
         }
+        .btn-add { background-color: #64748b; }
+        .btn-send { background-color: #10b981; }
+        button:active { transform: scale(0.95); }
 
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; }
-        .container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 450px; position: relative; z-index: 10; }
-        
-        .header-section { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #f0f2f5; padding-bottom: 15px; }
-        h2 { color: #1877f2; margin: 0; text-transform: uppercase; font-size: 20px; }
-        .description { font-size: 13px; color: #555; margin-top: 10px; line-height: 1.5; }
-        .team-info { font-weight: bold; color: #e67e22; margin-top: 5px; }
+        /* LỊCH SỬ UID */
+        .history-container {
+            margin-top: 10px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .history-header {
+            display: flex;
+            background: #e2e8f0;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 11px;
+            color: #475569;
+            text-align: center;
+        }
+        .history-header span { flex: 1; }
+        .history-list { height: 180px; overflow: hidden; }
+        .history-item {
+            display: flex;
+            padding: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 11px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .history-item:hover { background: #f1f5f9; }
+        .history-item span { flex: 1; }
+        .uid-text { color: #2563eb; font-weight: 600; text-decoration: underline; }
 
-        .form-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
-        
-        .btn-group { display: flex; gap: 10px; margin-top: 25px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; font-size: 14px; }
-        .btn-add { background-color: #636e72; }
-        .btn-send { background-color: #27ae60; }
-
-        /* Modal thông báo */
-        #custom-alert { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,0,0,0.3); z-index: 9999; width: 80%; max-width: 300px; text-align: center; }
-        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9998; }
-        .alert-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
-        .btn-close { background: #333; margin-top: 15px; width: 100%; color: white; }
+        /* MODAL THÔNG BÁO */
+        #custom-alert { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 20px; box-shadow: 0 0 50px rgba(0,0,0,0.5); z-index: 10000; width: 85%; max-width: 320px; text-align: center; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; }
     </style>
 </head>
 <body>
 
 <div id="overlay"></div>
 <div id="custom-alert">
-    <div class="alert-title">Thông báo</div>
-    <div id="alert-message">Nội dung</div>
-    <button class="btn-close" onclick="closeAlert()">Xác nhận</button>
+    <div id="alert-title" style="font-weight:bold; font-size:18px; margin-bottom:10px;"></div>
+    <div id="alert-message" style="font-size:14px; color:#475569; line-height:1.4;"></div>
+    <button style="background:#1e293b; color:white; border:none; padding:12px; width:100%; border-radius:10px; margin-top:15px; font-weight:bold;" onclick="closeAlert()">ĐÃ HIỂU</button>
 </div>
 
 <div class="container">
+    <div class="status-bar">
+        <div class="led"></div> HỆ THỐNG ĐANG HOẠT ĐỘNG
+    </div>
+
     <div class="header-section">
-        <h2>Quản Trị CoinCex</h2>
-        <div class="description">
-            Hệ thống quản lý và cấp phát mã Code ưu đãi dành riêng cho thành viên nhóm Yến Vy.
-            <div class="team-info"> Phân Khu: Nhóm Yến Vy - Telegram: @Onkill92</div>
-        </div>
+        <h2>QUẢN TRỊ COINCEX</h2>
+        <div class="team-info">Phân Khu: Yến Vy - Telegram: @Onkill92</div>
     </div>
 
     <div class="form-group">
@@ -70,145 +145,72 @@
     <div class="form-group">
         <label>Cấp Độ Đặc Quyền</label>
         <select id="vip">
-            <option>Vip 1</option>
-            <option>Vip 2</option>
-            <option>Vip 3</option>
+            <option>Vip 1</option><option>Vip 2</option><option>Vip 3</option>
         </select>
     </div>
 
     <div class="form-group">
         <label>Mã Code Quà Tặng</label>
-        <input type="text" id="code" style="font-size: 12px;" placeholder="Tương Ứng Cấp Độ Vip...">
-
+        <input type="text" id="code" style="font-size: 12px;" placeholder="Tương ứng cấp độ Vip...">
     </div>
 
     <div class="btn-group">
-        <button class="btn-add" onclick="showAlert('Lỗi Sai Nhánh', 'UID Không Đăng Kí Theo Link Mời !', '#eb4d4b')">Thêm UID</button>
-        <button class="btn-send" onclick="handleSend()">Gửi Mã Code</button>
+        <button class="btn-add" onclick="showAlert('Lỗi Hệ Thống', 'UID này không thuộc nhánh của nhóm Yến Vy!', '#ef4444')">THÊM UID</button>
+        <button class="btn-send" onclick="handleSend()">GỬI MÃ CODE</button>
     </div>
-</div>
-  
-  
-  <div class="history-container">
-    <div class="history-header">
-        <span>UID Hợp Lệ</span>
-        <span>Cấp Độ</span>
-        <span>Phần Thưởng</span>
-    </div>
-    <div class="history-list" id="history-scroll">
+
+    <div class="history-container">
+        <div class="history-header">
+            <span>UID (Click Copy)</span>
+            <span>Cấp Độ</span>
+            <span>Thưởng</span>
         </div>
+        <div class="history-list" id="history-scroll"></div>
+    </div>
 </div>
-
-<style>
-    .history-container {
-        margin-top: 20px;
-        background: #f9f9f9;
-        border-radius: 12px;
-        border: 1px solid #eee;
-        overflow: hidden;
-        font-family: sans-serif;
-    }
-    .history-header {
-        display: flex;
-        justify-content: space-between;
-        background: #f1f1f1;
-        padding: 10px;
-        font-weight: bold;
-        font-size: 13px;
-        color: #555;
-    }
-    .history-header span { flex: 1; text-align: center; }
-
-    .history-list {
-        height: 150px; /* Độ cao của khung cuộn */
-        overflow: hidden;
-        position: relative;
-    }
-
-    .history-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 10px;
-        border-bottom: 1px solid #f0f0f0;
-        font-size: 12px;
-        animation: slideUp 0.5s ease-out;
-    }
-    .history-item span { flex: 1; text-align: center; }
-    .uid-text { color: #1877f2; font-weight: 500; }
-    .vip-text { color: #e67e22; font-weight: bold; }
-    .reward-text { color: #27ae60; font-weight: bold; }
-
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 
 <script>
-    function generateRandomHistory() {
-        const historyList = document.getElementById('history-scroll');
-
-        // 1. Tạo UID ngẫu nhiên 10 chữ số
+    // Tự động tạo lịch sử
+    function generateHistory() {
+        const list = document.getElementById('history-scroll');
         const uid = Math.floor(1000000000 + Math.random() * 9000000000);
-
-        // 2. Tạo Cấp độ Vip ngẫu nhiên từ Vip 2 đến Vip 6
         const vip = "Vip " + (Math.floor(Math.random() * 5) + 2);
+        const reward = (Math.random() * (80 - 5) + 5).toFixed(4);
 
-        // 3. Tạo phần thưởng ngẫu nhiên từ 5.0000 đến 80.0000 (các số 0 có thể thay đổi)
-        // Tạo số từ 5 đến 80, sau đó thêm phần thập phân ngẫu nhiên
-        const mainReward = Math.floor(Math.random() * 76) + 5;
-        const decimal1 = Math.floor(Math.random() * 9) + 1;
-        const decimal2 = Math.floor(Math.random() * 10);
-        const decimal3 = Math.floor(Math.random() * 10);
-        const decimal4 = Math.floor(Math.random() * 10);
-        const reward = `${mainReward}.${decimal1}${decimal2}${decimal3}${decimal4}`;
-
-        // Tạo phần tử HTML mới
         const item = document.createElement('div');
         item.className = 'history-item';
-        item.innerHTML = `
-            <span class="uid-text">${uid}</span>
-            <span class="vip-text">${vip}</span>
-            <span class="reward-text">${reward}</span>
-        `;
-
-        // Thêm vào đầu danh sách
-        historyList.prepend(item);
-
-        // Giới hạn số lượng hiển thị (ví dụ tối đa 10 dòng để không nặng máy)
-      if (historyList.children.length > 10) {
-            historyList.removeChild(historyList.lastChild);
-        }
+        item.onclick = function() {
+            navigator.clipboard.writeText(uid);
+            alert("Đã copy UID: " + uid);
+        };
+        item.innerHTML = `<span class="uid-text">${uid}</span><span style="color:#f59e0b; font-weight:bold;">${vip}</span><span style="color:#10b981; font-weight:bold;">${reward}</span>`;
+        
+        list.prepend(item);
+        if (list.children.length > 10) list.removeChild(list.lastChild);
     }
+    setInterval(generateHistory, 2500);
+    generateHistory();
 
-    // Tự động tạo dữ liệu mới mỗi 2 giây
-    setInterval(generateRandomHistory, 2000);
-    
-    // Chạy lần đầu ngay khi load
-    generateRandomHistory();
-</script>
-  
-
-<script>
     function showAlert(title, message, color) {
-        const titleEl = document.querySelector('.alert-title');
-        titleEl.innerText = title;
-        titleEl.style.color = color;
+        document.getElementById('alert-title').innerText = title;
+        document.getElementById('alert-title').style.color = color;
         document.getElementById('alert-message').innerText = message;
         document.getElementById('custom-alert').style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
     }
+
     function closeAlert() {
         document.getElementById('custom-alert').style.display = 'none';
         document.getElementById('overlay').style.display = 'none';
     }
+
     function handleSend() {
         const uid = document.getElementById('uid').value;
         const code = document.getElementById('code').value;
         if(!uid || !code) {
-            showAlert('Cảnh Báo', 'UID ' + uid + ' chưa tạo lệnh nạp đầu !', '#f39c12');
+            showAlert('Thông Báo', 'UID ' + uid + ' chưa có lệnh nạp đầu !', '#f59e0b');
         } else {
-            showAlert('Thành Công', 'Đã gửi mã code cho UID ' + uid, '#27ae60');
+            showAlert('Thành Công', 'Mã Code đang được gửi tới UID ' + uid + '. Vui lòng kiểm tra hòm thư trên sàn !', '#10b981');
         }
     }
 </script>
